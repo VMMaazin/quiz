@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "976479704040",
+    "project_id": "flutter-quiz-app-co",
+    "storage_bucket": "flutter-quiz-app-co.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:976479704040:android:e32855ca3629c534590a5d",
+        "android_client_info": {
+          "package_name": "com.M.collegequizapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAj3BqQ3p1ggQpVl5SLb7CbZzcNIx9XK34"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:976479704040:android:38ddb5daca995f92590a5d",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAj3BqQ3p1ggQpVl5SLb7CbZzcNIx9XK34"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
