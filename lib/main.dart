@@ -69,7 +69,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
     }
 
     try {
-      final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get(const GetOptions(source: Source.server));
       if (!doc.exists) {
         await FirebaseAuth.instance.signOut();
         if (mounted) Navigator.pushReplacementNamed(context, '/login');

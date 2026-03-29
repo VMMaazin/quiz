@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -167,14 +167,29 @@ class PendingApprovalsTab extends StatelessWidget {
           children: [
             IconButton(
               icon: const Icon(Icons.check_circle, color: AppTheme.successColor),
-              onPressed: () => _showConfirmDialog(context, 'Approve', 'Approve this user?', () {
-                FirebaseFirestore.instance.collection('users').doc(uid).update({'isApproved': true});
+              onPressed: () => _showConfirmDialog(context, 'Approve', 'Approve this user?', () async {
+                try {
+                  await FirebaseFirestore.instance.collection('users').doc(uid).update({'isApproved': true});
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('User approved!'), backgroundColor: AppTheme.successColor));
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed: $e'), backgroundColor: AppTheme.errorColor));
+                  }
+                }
               }),
             ),
             IconButton(
               icon: const Icon(Icons.cancel, color: AppTheme.errorColor),
-              onPressed: () => _showConfirmDialog(context, 'Reject', 'Reject and delete this user?', () {
-                FirebaseFirestore.instance.collection('users').doc(uid).delete();
+              onPressed: () => _showConfirmDialog(context, 'Reject', 'Reject and delete this user?', () async {
+                try {
+                  await FirebaseFirestore.instance.collection('users').doc(uid).delete();
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed: $e'), backgroundColor: AppTheme.errorColor));
+                  }
+                }
               }),
             ),
           ],

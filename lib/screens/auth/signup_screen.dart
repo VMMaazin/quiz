@@ -54,7 +54,7 @@ class _SignupScreenState extends State<SignupScreen> {
         'email': _emailController.text.trim(),
         'role': _selectedRole,
         'createdAt': FieldValue.serverTimestamp(),
-        'isApproved': false,
+        'isApproved': _selectedRole == 'Admin', // Admin auto-approves to bypass lockouts
       };
 
       if (_selectedRole == 'Student') {
@@ -70,7 +70,12 @@ class _SignupScreenState extends State<SignupScreen> {
           .set(userData);
 
       if (mounted) {
-        Navigator.pushReplacementNamed(context, '/pending_approval');
+        if (_selectedRole == 'Admin') {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Admin account created and auto-approved. You can now log in.')));
+          Navigator.pushReplacementNamed(context, '/login');
+        } else {
+          Navigator.pushReplacementNamed(context, '/pending_approval');
+        }
       }
     } on FirebaseAuthException catch (e) {
       _showError(e.message ?? 'Registration failed');
@@ -150,12 +155,19 @@ class _SignupScreenState extends State<SignupScreen> {
               isSelected: _selectedRole == 'Student',
               onTap: () => setState(() => _selectedRole = 'Student'),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: 8),
             _RoleButton(
               title: 'Faculty',
               icon: Icons.person_rounded,
               isSelected: _selectedRole == 'Faculty',
               onTap: () => setState(() => _selectedRole = 'Faculty'),
+            ),
+            const SizedBox(width: 8),
+            _RoleButton(
+              title: 'Admin',
+              icon: Icons.admin_panel_settings_rounded,
+              isSelected: _selectedRole == 'Admin',
+              onTap: () => setState(() => _selectedRole = 'Admin'),
             ),
           ],
         ),

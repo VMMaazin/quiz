@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -80,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       final userData = await FirebaseFirestore.instance
           .collection('users')
           .doc(userCredential.user!.uid)
-          .get();
+          .get(const GetOptions(source: Source.server));
 
       // 1. If no Firestore user document exists -> navigate to LoginScreen (handled by throwing)
       if (!userData.exists) {

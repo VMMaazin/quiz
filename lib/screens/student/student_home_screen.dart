@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -107,6 +107,9 @@ class _StudentQuizzesTabState extends State<StudentQuizzesTab> {
       stream: FirebaseFirestore.instance.collection('users').doc(user?.uid).snapshots(),
       builder: (context, userSnap) {
         if (!userSnap.hasData) return const Center(child: CircularProgressIndicator());
+        if (!userSnap.data!.exists || userSnap.data!.data() == null) {
+          return const Center(child: Text('Loading user data...'));
+        }
         final userData = userSnap.data!.data() as Map<String, dynamic>;
         final classId = userData['classId'];
 
@@ -352,6 +355,9 @@ class StudentProfileTab extends StatelessWidget {
       stream: FirebaseFirestore.instance.collection('users').doc(user?.uid).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+        if (!snapshot.data!.exists || snapshot.data!.data() == null) {
+          return const Center(child: Text('Loading profile...'));
+        }
         final data = snapshot.data!.data() as Map<String, dynamic>;
         final name = data['name'] ?? 'User';
         final email = data['email'] ?? '';
