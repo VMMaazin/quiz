@@ -11,12 +11,12 @@ import 'screens/faculty/faculty_home_screen.dart';
 import 'screens/student/student_home_screen.dart';
 import 'screens/splash_screen.dart';
 import 'utils/app_theme.dart';
+import 'screens/student/attempt_quiz_screen.dart';
+import 'screens/student/quiz_result_review_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -61,7 +61,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
   Future<void> _checkInitialAuth() async {
     // Give Firebase a moment to initialize the current user state
     await Future.delayed(Duration.zero);
-    
+
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       if (mounted) Navigator.pushReplacementNamed(context, '/login');
@@ -69,7 +69,10 @@ class _AuthWrapperState extends State<AuthWrapper> {
     }
 
     try {
-      final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get(const GetOptions(source: Source.server));
+      final doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get(const GetOptions(source: Source.server));
       if (!doc.exists) {
         await FirebaseAuth.instance.signOut();
         if (mounted) Navigator.pushReplacementNamed(context, '/login');
@@ -114,8 +117,6 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: CircularProgressIndicator()),
-    );
+    return const Scaffold(body: Center(child: CircularProgressIndicator()));
   }
 }
