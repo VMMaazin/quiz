@@ -45,7 +45,10 @@ class _FacultyHomeScreenState extends State<FacultyHomeScreen> {
         currentIndex: _currentIndex,
         onTap: (i) => setState(() => _currentIndex = i),
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.class_), label: 'My Classes'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.class_),
+            label: 'My Classes',
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.quiz), label: 'Quizzes'),
         ],
       ),
@@ -79,7 +82,8 @@ class MyClassesTab extends StatelessWidget {
           }
           return false;
         }).toList();
-        if (docs.isEmpty) return const Center(child: Text('No classes assigned yet'));
+        if (docs.isEmpty)
+          return const Center(child: Text('No classes assigned yet'));
 
         return ListView.builder(
           itemCount: docs.length,
@@ -94,9 +98,11 @@ class MyClassesTab extends StatelessWidget {
                 title: Text(className),
                 subtitle: Text(section),
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => ClassDetailScreen(classDoc: d),
-                  ));
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => ClassDetailScreen(classDoc: d),
+                    ),
+                  );
                 },
               ),
             );
@@ -145,13 +151,29 @@ class QuizzesTab extends StatelessWidget {
     if (uid == null) return const Center(child: Text('Not logged in'));
 
     return StreamBuilder<QuerySnapshot>(
-      stream: _quizzesRef.where('createdBy', isEqualTo: uid).snapshots(),
+      stream: _quizzesRef.where('createdByUid', isEqualTo: uid).snapshots(),
       builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                  const SizedBox(height: 16),
+                  Text('Error: ${snapshot.error}', textAlign: TextAlign.center),
+                ],
+              ),
+            ),
+          );
+        }
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
         final docs = snapshot.data?.docs ?? [];
-        if (docs.isEmpty) return const Center(child: Text('No quizzes created yet'));
+        if (docs.isEmpty)
+          return const Center(child: Text('No quizzes created yet'));
 
         return ListView.builder(
           itemCount: docs.length,
@@ -170,7 +192,13 @@ class QuizzesTab extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     const SizedBox(height: 4),
                     Text('Class: $className - Section $section'),
                     const SizedBox(height: 2),
@@ -183,13 +211,15 @@ class QuizzesTab extends StatelessWidget {
                         onPressed: () {
                           final questions = data['questions'] as List?;
                           final totalQuestions = questions?.length ?? 0;
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => QuizResultsScreen(
-                              quizId: d.id,
-                              quizTitle: title,
-                              totalQuestions: totalQuestions,
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => QuizResultsScreen(
+                                quizId: d.id,
+                                quizTitle: title,
+                                totalQuestions: totalQuestions,
+                              ),
                             ),
-                          ));
+                          );
                         },
                         child: const Text('View Results'),
                       ),

@@ -29,7 +29,13 @@ class QuizResultReviewScreen extends StatelessWidget {
                 final correctAnswer = question['correctAnswer'];
                 final isCorrect = userAnswer == correctAnswer;
 
-                return _buildQuestionReviewCard(index, question, userAnswer, correctAnswer, isCorrect);
+                return _buildQuestionReviewCard(
+                  index,
+                  question,
+                  userAnswer,
+                  correctAnswer,
+                  isCorrect,
+                );
               },
             ),
           ),
@@ -52,7 +58,11 @@ class QuizResultReviewScreen extends StatelessWidget {
           Text(
             attemptData['quizTitle'] ?? 'Quiz Results',
             textAlign: TextAlign.center,
-            style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.bold, color: AppTheme.primaryColor),
+            style: GoogleFonts.poppins(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: AppTheme.primaryColor,
+            ),
           ),
           const SizedBox(height: 16),
           Row(
@@ -60,7 +70,10 @@ class QuizResultReviewScreen extends StatelessWidget {
             children: [
               _StatBadge(label: 'Score', value: '$score/$total'),
               const SizedBox(width: 24),
-              _StatBadge(label: 'Grade', value: '${percentage.toStringAsFixed(0)}%'),
+              _StatBadge(
+                label: 'Grade',
+                value: '${percentage.toStringAsFixed(0)}%',
+              ),
             ],
           ),
         ],
@@ -68,7 +81,13 @@ class QuizResultReviewScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildQuestionReviewCard(int index, dynamic question, dynamic userAnswer, dynamic correctAnswer, bool isCorrect) {
+  Widget _buildQuestionReviewCard(
+    int index,
+    dynamic question,
+    dynamic userAnswer,
+    dynamic correctAnswer,
+    bool isCorrect,
+  ) {
     final options = question['options'] as List<dynamic>;
 
     return Card(
@@ -82,14 +101,23 @@ class QuizResultReviewScreen extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 14,
-                  backgroundColor: isCorrect ? AppTheme.successColor : AppTheme.errorColor,
-                  child: Icon(isCorrect ? Icons.check : Icons.close, size: 16, color: Colors.white),
+                  backgroundColor: isCorrect
+                      ? AppTheme.successColor
+                      : AppTheme.errorColor,
+                  child: Icon(
+                    isCorrect ? Icons.check : Icons.close,
+                    size: 16,
+                    color: Colors.white,
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
                     'Question ${index + 1}',
-                    style: GoogleFonts.poppins(fontWeight: FontWeight.bold, color: Colors.grey.shade700),
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey.shade700,
+                    ),
                   ),
                 ),
               ],
@@ -97,7 +125,10 @@ class QuizResultReviewScreen extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               question['question'],
-              style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600),
+              style: GoogleFonts.poppins(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
             ),
             const SizedBox(height: 20),
             ...List.generate(options.length, (i) {
@@ -111,16 +142,27 @@ class QuizResultReviewScreen extends StatelessWidget {
               if (isCorrectOption) {
                 bgColor = AppTheme.successColor.withValues(alpha: 0.08);
                 borderColor = AppTheme.successColor;
-                icon = const Icon(Icons.check_circle, color: AppTheme.successColor, size: 20);
+                icon = const Icon(
+                  Icons.check_circle,
+                  color: AppTheme.successColor,
+                  size: 20,
+                );
               } else if (isUserSelection && !isCorrect) {
                 bgColor = AppTheme.errorColor.withValues(alpha: 0.08);
                 borderColor = AppTheme.errorColor;
-                icon = const Icon(Icons.cancel, color: AppTheme.errorColor, size: 20);
+                icon = const Icon(
+                  Icons.cancel,
+                  color: AppTheme.errorColor,
+                  size: 20,
+                );
               }
 
               return Container(
                 margin: const EdgeInsets.only(bottom: 8),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 decoration: BoxDecoration(
                   color: bgColor,
                   borderRadius: BorderRadius.circular(12),
@@ -132,7 +174,11 @@ class QuizResultReviewScreen extends StatelessWidget {
                       '${String.fromCharCode(65 + i)}.',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: isCorrectOption ? AppTheme.successColor : isUserSelection ? AppTheme.errorColor : Colors.grey,
+                        color: isCorrectOption
+                            ? AppTheme.successColor
+                            : isUserSelection
+                            ? AppTheme.errorColor
+                            : Colors.grey,
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -140,12 +186,18 @@ class QuizResultReviewScreen extends StatelessWidget {
                       child: Text(
                         options[i],
                         style: TextStyle(
-                          color: isCorrectOption ? AppTheme.successColor.withValues(alpha: 0.8) : isUserSelection ? AppTheme.errorColor.withValues(alpha: 0.8) : Colors.black87,
-                          fontWeight: (isCorrectOption || isUserSelection) ? FontWeight.w600 : FontWeight.normal,
+                          color: isCorrectOption
+                              ? AppTheme.successColor.withValues(alpha: 0.8)
+                              : isUserSelection
+                              ? AppTheme.errorColor.withValues(alpha: 0.8)
+                              : Colors.black87,
+                          fontWeight: (isCorrectOption || isUserSelection)
+                              ? FontWeight.w600
+                              : FontWeight.normal,
                         ),
                       ),
                     ),
-                    if (icon != null) icon,
+                    ?icon,
                   ],
                 ),
               );
@@ -166,10 +218,19 @@ class _StatBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(value, style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.primaryColor)),
-        Text(label, style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
+        Text(
+          value,
+          style: GoogleFonts.poppins(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: AppTheme.primaryColor,
+          ),
+        ),
+        Text(
+          label,
+          style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+        ),
       ],
     );
   }
 }
-
